@@ -59,21 +59,43 @@ describe "User" do
     it "website.com should be valid" do
       @user.website = 'website.com'
       @user.should be_valid
+      @user.errors[:website].should be_empty
     end
 
     it "wEbsIte.coM should be valid" do
       @user.website = 'wEbsIte.coM'
       @user.should be_valid
+      @user.errors[:website].should be_empty
     end
 
     it "http://12pointdesign.com/advice/dashes_vs_underscores.asp should be valid" do
       @user.website = 'http://12pointdesign.com/advice/dashes_vs_underscores.asp'
       @user.should be_valid
+      @user.errors[:website].should be_empty
     end
 
     it "stage.website.com/m/65/John_Oconer should be valid" do
       @user.website = 'stage.website.com/m/65/John_Oconer'
       @user.should be_valid
+      @user.errors[:website].should be_empty
+    end
+
+    it "http://website.com/~smith//// should be valid" do
+      @user.website = 'http://website.com/~smith////'
+      @user.should be_valid
+      @user.errors[:website].should be_empty
+    end
+
+    it "www.website.com/~smith//// should be valid" do
+      @user.website = 'www.website.com/~smith////'
+      @user.should be_valid
+      @user.errors[:website].should be_empty
+    end
+
+    it "website.com/~smith//a// should be valid" do
+      @user.website = 'website.com/~smith//a//'
+      @user.should be_valid
+      @user.errors[:website].should be_empty
     end
 
 
