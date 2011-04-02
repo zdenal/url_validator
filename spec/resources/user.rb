@@ -1,8 +1,8 @@
 class User
   include ActiveModel::Validations
 
-  attr_accessor :website
+  attr_accessor :website, :url
 
-  validates :website, :url => true
+  validates_url :website, :url, :message => 'aaaaa'
 end
 

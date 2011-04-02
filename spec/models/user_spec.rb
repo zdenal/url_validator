@@ -14,7 +14,7 @@ describe "User" do
   after(:all) do
     ActiveRecord::Base.connection.drop_table(:users)
   end
-
+=begin
   context "with regular validator" do
     before do
       @user = User.new
@@ -41,7 +41,7 @@ describe "User" do
       @user.website = ""
       @user.should be_valid
     end
-
+z
     it "should allow a valid url" do
       @user.website = "http://www.example.com"
       @user.should be_valid
@@ -68,6 +68,28 @@ describe "User" do
       @user.website = "ftp://ftp.example.com"
       @user.should be_valid
     end
+  end
+=end
+  context "with different charset" do
+    before do
+      @user = UserWithAr.new
+    end
+
+    it "should be valid" do
+      @user.website = "http://www.中国政府.政务.cn"
+      #@user.website = "http://random"
+      #@user.valid?
+      #@user.website = "http://random"
+      #@user.website = "http://random"
+      puts @user.website_normalized
+      @user.valid?
+      @user.save
+      debugger
+      puts ''
+      #@user.save
+      #@user.should_not be_valid
+    end
+
   end
 end
 

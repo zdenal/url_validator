@@ -1,29 +1,28 @@
 require 'uri'
 require 'active_model'
+require 'addressable/uri'
 
 module ActiveModel
   module Validations
-    class UrlValidator < ActiveModel::EachValidator
+    class UrlValidator < ActiveModel::Validator
 
-      def initialize(options)
-        options.reverse_merge!(:schemes => %w(http https))
-        options.reverse_merge!(:message => "is not a valid URL")
-        super(options)
-      end
+      def validate(record)
+        schemes = options[:schemes] || %w(http https ftp).map(&:to_s)
+        message = options[:message] || "is not a valid URL"
 
-      def validate_each(record, attribute, value)
-        schemes = [*options.fetch(:schemes)].map(&:to_s)
-
-        if URI::regexp(schemes).match(value)
+        options[:attributes].each do |attribute|
           begin
-            URI.parse(value)
-          rescue URI::InvalidURIError
-            record.errors.add(attribute, options.fetch(:message), :value => value)
+            uri = Addressable::URI.parse(record.send(attribute) || '')
+            unless schemes.include?(uri.scheme)
+              record.errors.add(attribute, message, :value => uri.to_s)
+            end
+          rescue Addressable::URI::InvalidURIError
+            record.errors.add(attribute, message, :value => uri.to_s)
           end
-        else
-          record.errors.add(attribute, options.fetch(:message), :value => value)
         end
+
       end
+
     end
 
     module ClassMethods
@@ -42,6 +41,14 @@ module ActiveModel
       # * <tt>:schemes</tt> - Array of URI schemes to validate against. (default is +['http', 'https']+)
 
       def validates_url(*attr_names)
+        attrs = attr_names.take_while{|a| !a.instance_of?(Hash)}
+        attrs.each do |a_name|
+          class_eval <<-EOF
+            def #{a_name}_normalized
+              Addressable::URI.parse(#{a_name}).normalize.to_s unless #{a_name}.blank?
+            end
+          EOF
+        end
         validates_with UrlValidator, _merge_attributes(attr_names)
       end
     end
