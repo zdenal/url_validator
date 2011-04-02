@@ -7,13 +7,17 @@ module ActiveModel
     class UrlValidator < ActiveModel::Validator
 
       def validate(record)
-        schemes = options[:schemes] || %w(http https ftp).map(&:to_s)
+        schemes = options[:schemes] || %w(http https).join('|')
         message = options[:message] || "is not a valid URL"
+        url_regexp = /^((#{schemes}):\/\/){0,1}[a-z0-9]+([a-z0-9\-\.]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/ix
 
         options[:attributes].each do |attribute|
+          value = record.send(attribute).to_s
+          next if value.blank? && (options[:allow_blank] || options[:allow_nil])
+          normalized_value = record.send(attribute.to_s + '_normalized')
           begin
-            uri = Addressable::URI.parse(record.send(attribute) || '')
-            unless schemes.include?(uri.scheme)
+            uri = Addressable::URI.parse(value)
+            unless url_regexp =~ normalized_value
               record.errors.add(attribute, message, :value => uri.to_s)
             end
           rescue Addressable::URI::InvalidURIError
@@ -28,7 +32,7 @@ module ActiveModel
     module ClassMethods
       # Validates whether the value of the specified attribute is valid url.
       #
-      #   class Unicorn
+      #   class User
       #     include ActiveModel::Validations
       #     attr_accessor :website, :ftpsite
       #     validates_url :website, :allow_blank => true
@@ -39,13 +43,12 @@ module ActiveModel
       # * <tt>:allow_nil</tt> - If set to true, skips this validation if the attribute is +nil+ (default is +false+).
       # * <tt>:allow_blank</tt> - If set to true, skips this validation if the attribute is blank (default is +false+).
       # * <tt>:schemes</tt> - Array of URI schemes to validate against. (default is +['http', 'https']+)
-
       def validates_url(*attr_names)
         attrs = attr_names.take_while{|a| !a.instance_of?(Hash)}
         attrs.each do |a_name|
           class_eval <<-EOF
             def #{a_name}_normalized
-              Addressable::URI.parse(#{a_name}).normalize.to_s unless #{a_name}.blank?
+              Addressable::IDNA.to_ascii(#{a_name}.to_s)
             end
           EOF
         end

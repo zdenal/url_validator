@@ -3,6 +3,6 @@ class UserWithCustomScheme
 
   attr_accessor :website
 
-  validates :website, :url => { :schemes => ['ftp'] }
+  validates_url :website, :schemes => ['ftp']
 end
 

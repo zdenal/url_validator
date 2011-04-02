@@ -3,6 +3,6 @@ class UserWithBlank
 
   attr_accessor :website
 
-  validates :website, :url => {:allow_blank => true}
+  validates_url :website, :allow_blank => true
 end
 
