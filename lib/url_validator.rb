@@ -7,14 +7,16 @@ module ActiveModel
     class UrlValidator < ActiveModel::Validator
 
       def validate(record)
-        schemes = options[:schemes] || %w(http https).join('|')
         message = options[:message] || "is not a valid URL"
-        url_regexp = /^((#{schemes}):\/\/){0,1}[a-z0-9]+([a-z0-9\-\.]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/ix
+        schemes = options[:schemes] || %w(http https)
+        url_regexp = /^((#{schemes.join('|')}):\/\/){0,1}[a-z0-9]+([a-z0-9\-\.]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/ix
+        preffered_schema = options[:preffered_schema] || "#{schemes.first}://"
 
         options[:attributes].each do |attribute|
           value = record.send(attribute).to_s
           next if value.blank? && (options[:allow_blank] || options[:allow_nil])
-          normalized_value = record.send(attribute.to_s + '_normalized')
+          record.send("#{attribute}=", preffered_schema << value) if !value.start_with?(*schemes)
+          normalized_value = record.send("#{attribute}_normalized")
           begin
             uri = Addressable::URI.parse(value)
             unless url_regexp =~ normalized_value

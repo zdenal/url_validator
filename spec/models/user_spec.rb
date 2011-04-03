@@ -236,5 +236,50 @@ describe "User" do
       @user.errors[:website].to_s.should == 'is not a valid URL'
     end
   end
+
+  context "automated preffilling prefix - preffill if didnt exists" do
+    before do
+      @user = User.new
+      @user.website = 'website.com'
+      @user_with_s = UserWithPrefferedSchema.new
+      @user_with_s.website = 'website.com'
+    end
+
+    it "should preffill http:// to url" do
+      @user.should be_valid
+      @user.website.start_with?('http://').should be_true
+    end
+
+    it "should preffill https:// to url" do
+      @user_with_s.should be_valid
+      @user_with_s.website.start_with?('https://').should be_true
+    end
+  end
+
+  context "automated preffilling prefix - dont preffill if exist" do
+    before do
+      @user = User.new
+      @user.website = 'http://website.com'
+      @user_with_s = UserWithPrefferedSchema.new
+      @user_with_s.website = 'https://website.com'
+    end
+
+    it "should not preffill http://" do
+      @user.should be_valid
+      @user.website.should == 'http://website.com'
+      @user.website = 'https://website.com'
+      @user.valid?
+      @user.website.should == 'https://website.com'
+    end
+
+    it "should not preffill https://" do
+      @user_with_s.should be_valid
+      @user_with_s.website.should == 'https://website.com'
+      @user_with_s.website = 'http://website.com'
+      @user.valid?
+      @user_with_s.website.should == 'http://website.com'
+    end
+  end
+
 end
 

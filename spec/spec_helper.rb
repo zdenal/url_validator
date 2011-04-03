@@ -22,4 +22,5 @@ autoload :User                 ,'resources/user'
 autoload :UserWithBlank        ,'resources/user_with_blank'
 autoload :UserWithAr           ,'resources/user_with_ar'
 autoload :UserWithCustomScheme ,'resources/user_with_custom_scheme'
+autoload :UserWithPrefferedSchema ,'resources/user_with_preffered_schema'
 
