@@ -16,8 +16,8 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "rspec"
   s.add_development_dependency "ruby-debug"
+  s.add_development_dependency "sqlite3"
   s.add_dependency "rails", "3.0.1"
-  s.add_dependency "sqlite3"
   s.add_dependency "addressable"
 
   s.files         = `git ls-files`.split("\n")
