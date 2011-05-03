@@ -58,7 +58,7 @@ If preffered scheme is 'ftp://' and URI is with some scheme **http://website.com
 
 If preffered scheme is 'ftp://' and URI is without some scheme **website.com**, then after valid is URI **ftp://website.com**.
 
-For constriction URI schemes, use option `:scheme => ['ftp'], :preffered_scheme => 'ftp://'`, then **http://website.com** will not valid and **website.com** will valid and prefilled to **ftp://website.com**.
+For constriction URI schemes, use option `:scheme => ['ftp']`, then **http://website.com** will not valid and **website.com** will valid and prefilled to **ftp://website.com**.
 
 
 ## Tests ##
@@ -67,5 +67,5 @@ For constriction URI schemes, use option `:scheme => ['ftp'], :preffered_scheme 
 
 You can find more specification for valid/invalid checking URI in spec folder inside tests.
 
-    rake spec  -- run tests.
+    rake spec  # run tests.
 
