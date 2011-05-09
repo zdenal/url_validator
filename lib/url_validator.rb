@@ -14,7 +14,7 @@ module ActiveModel
         options[:attributes].each do |attribute|
           value = record.send(attribute).to_s
           next if value.blank? && (options[:allow_blank] || options[:allow_nil])
-          record.send("#{attribute}=", preffered_schema << value) if !value.start_with?(*schemes)
+          record.send("#{attribute}=", preffered_schema + value) if !value.start_with?(*schemes)
           normalized_value = record.send("#{attribute}_normalized")
           begin
             uri = Addressable::URI.parse(value)

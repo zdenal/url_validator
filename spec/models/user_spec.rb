@@ -126,6 +126,14 @@ describe "User" do
       @user.errors[:website].should be_empty
     end
 
+    it "should return correct data" do
+      @user.website = "website.com"
+      @user.url = "website.com/blog"
+      @user.should be_valid
+      @user.website.should == "http://website.com"
+      @user.url.should == "http://website.com/blog"
+    end
+
   end
 
   context "with ActiveRecord" do
