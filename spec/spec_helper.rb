@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__) + '/resources')
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require 'rubygems'
-require 'spec'
+require 'rspec'
 require 'sqlite3'
 require 'active_record'
 require 'active_record/base'

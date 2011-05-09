@@ -11,7 +11,6 @@ module ActiveModel
         schemes = options[:schemes] || %w(http https)
         url_regexp = /^((#{schemes.join('|')}):\/\/){0,1}[a-z0-9]+([a-z0-9\-\.]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/ix
         preffered_schema = options[:preffered_schema] || "#{schemes.first}://"
-
         options[:attributes].each do |attribute|
           value = record.send(attribute).to_s
           next if value.blank? && (options[:allow_blank] || options[:allow_nil])

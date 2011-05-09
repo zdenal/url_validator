@@ -1,3 +1,5 @@
+# coding: utf-8
+
 require 'spec_helper'
 
 describe "User" do
@@ -123,6 +125,7 @@ describe "User" do
       @user.should be_valid
       @user.errors[:website].should be_empty
     end
+
   end
 
   context "with ActiveRecord" do
@@ -222,7 +225,7 @@ describe "User" do
 
     it "should show correct message" do
       @user.valid?
-      @user.errors[:website].to_s.should == 'bad bad URL'
+      @user.errors[:website].join.should == 'bad bad URL'
     end
   end
 
@@ -233,7 +236,7 @@ describe "User" do
 
     it "should show correct message" do
       @user.valid?
-      @user.errors[:website].to_s.should == 'is not a valid URL'
+      @user.errors[:website].join.should == 'is not a valid URL'
     end
   end
 
