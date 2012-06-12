@@ -100,6 +100,10 @@ describe "User" do
       @user.errors[:website].should be_empty
     end
 
+    it "website with  '.travel' should be valid" do
+      @user.website = 'somesite.travel'
+      @user.should be_valid
+    end
 
   end
 

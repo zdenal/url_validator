@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project = "url_validator"
 
   s.add_development_dependency "rspec"
-  s.add_development_dependency "ruby-debug19"
+  s.add_development_dependency "debugger"
   s.add_development_dependency "sqlite3"
   s.add_dependency "rails"
   s.add_dependency "addressable"
