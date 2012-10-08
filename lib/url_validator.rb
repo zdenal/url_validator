@@ -13,6 +13,7 @@ module ActiveModel
         options[:attributes].each do |attribute|
           begin
             value = record.send(attribute).to_s
+            value.gsub!(/\s+/, "") if value.present?
             next if value.blank? && (options[:allow_blank] || options[:allow_nil])
 
             uri = Addressable::URI.parse(value)

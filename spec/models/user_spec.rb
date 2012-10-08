@@ -32,6 +32,16 @@ describe "User" do
       @user.should_not be_valid
     end
 
+    it "should sanitize space in url" do
+      @user.website = "web.asd dot.com"
+      @user.should be_valid
+    end
+
+    it "should sanitize space in url" do
+      @user.website = "webasd\tdot.com"
+      @user.should be_valid
+    end
+
     ["htt://www.website.com", "htttp://www.website.com"].each do |url|
       it "should not accept invalid #{url}" do
         @user.website = url
