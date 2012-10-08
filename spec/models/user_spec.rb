@@ -32,19 +32,8 @@ describe "User" do
       @user.should_not be_valid
     end
 
-    it "www.website.c should not be valid" do
-      @user.website = 'www.website.c'
-      @user.should_not be_valid
-    end
-
-    it "www.web site.com should not be valid" do
-      @user.website = 'www.web site.com'
-      @user.should_not be_valid
-    end
-
-    it "should not accept invalid URLs" do
-      ["htt://www.website.com", "htttp://www.website.com",
-        "http:/www.website.com", "http://website"].each do |url|
+    ["htt://www.website.com", "htttp://www.website.com"].each do |url|
+      it "should not accept invalid #{url}" do
         @user.website = url
         @user.should_not be_valid
       end
@@ -146,14 +135,9 @@ describe "User" do
     end
 
     it "should not allow invalid url: website" do
-      @user.website = "website"
+      @user.website = "ftp://website.com"
       @user.should_not be_valid
       @user.errors[:website].should_not be_empty
-    end
-
-    it "should not allow invalid url: website.c" do
-      @user.website = "website.c"
-      @user.should_not be_valid
     end
   end
 
@@ -192,7 +176,7 @@ describe "User" do
     end
 
     it "should not be valid http://www.詹姆斯.c" do
-      @user.website = "www.詹姆斯.c"
+      @user.website = "ftp://www.詹姆斯"
       @user.should_not be_valid
       @user.errors[:website].should_not be_empty
     end
