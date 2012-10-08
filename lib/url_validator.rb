@@ -9,17 +9,28 @@ module ActiveModel
       def validate(record)
         message = options[:message] || "is not a valid URL"
         schemes = options[:schemes] || %w(http https)
-        url_regexp = /^((#{schemes.join('|')}):\/\/){0,1}[a-z0-9]+([a-z0-9\-\.]+)*\.[a-z]{2,6}(:[0-9]{1,5})?(\/.*)?$/ix
         preffered_schema = options[:preffered_schema] || "#{schemes.first}://"
         options[:attributes].each do |attribute|
-          value = record.send(attribute).to_s
-          next if value.blank? && (options[:allow_blank] || options[:allow_nil])
-          record.send("#{attribute}=", preffered_schema + value) if !value.start_with?(*schemes)
-          normalized_value = record.send("#{attribute}_normalized")
           begin
+            value = record.send(attribute).to_s
+            next if value.blank? && (options[:allow_blank] || options[:allow_nil])
+
             uri = Addressable::URI.parse(value)
-            unless url_regexp =~ normalized_value
-              record.errors.add(attribute, message, :value => uri.to_s)
+
+            if uri.scheme.blank?
+              record.send("#{attribute}=", preffered_schema + value)
+              value = preffered_schema + value
+              uri = Addressable::URI.parse(value)
+            end
+
+            unless schemes.include?(uri.scheme)
+              raise Addressable::URI::InvalidURIError
+            end
+
+            normalized_value = record.send("#{attribute}_normalized")
+
+            if value.blank? && (!options[:allow_blank] || !options[:allow_nil])
+              raise Addressable::URI::InvalidURIError
             end
           rescue Addressable::URI::InvalidURIError
             record.errors.add(attribute, message, :value => uri.to_s)
