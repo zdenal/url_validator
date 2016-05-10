@@ -50,13 +50,13 @@ Url validator automaticly prefill scheme '**http://**' (by schemes options - see
  * `:allow_nil => false/true` >          default = false. The same princip like in others validations.
  * `:message => 'Some custom message'`   default is: "is not a valid URL". A custom error message.
  * `:schemes => ['http', 'https',...]`   default = ['http', 'https']. Array of URI schemes to validate against. If checked URI missing scheme, then the first scheme of this array is chosen for prefill URI.
- *  `:prefferred_scheme => 'ftp://'`     default is the first item from `schemes` array. If setted, then the validator prefill the checked URI with this scheme if missing some scheme.
+ *  `:preferred_scheme => 'ftp://'`     default is the first item from `schemes` array. If setted, then the validator prefill the checked URI with this scheme if missing some scheme.
  *  `:if/:unless => .....`               the same like in others validations.
 
 
-If preffered scheme is 'ftp://' and URI is with some scheme **http://website.com**, then after valid is URI **http://website.com**.
+If preferred scheme is 'ftp://' and URI is with some scheme **http://website.com**, then after valid is URI **http://website.com**.
 
-If preffered scheme is 'ftp://' and URI is without some scheme **website.com**, then after valid is URI **ftp://website.com**.
+If preferred scheme is 'ftp://' and URI is without some scheme **website.com**, then after valid is URI **ftp://website.com**.
 
 For constriction URI schemes, use option `:scheme => ['ftp']`, then **http://website.com** will not valid and **website.com** will valid and prefilled to **ftp://website.com**.
 

@@ -9,7 +9,7 @@ module ActiveModel
       def validate(record)
         message = options[:message] || "is not a valid URL"
         schemes = options[:schemes] || %w(http https)
-        preffered_schema = options[:preffered_schema] || "#{schemes.first}://"
+        preferred_schema = options[:preferred_schema] || "#{schemes.first}://"
         options[:attributes].each do |attribute|
           begin
             value = record.send(attribute).to_s
@@ -19,8 +19,8 @@ module ActiveModel
             uri = Addressable::URI.parse(value)
 
             if uri.scheme.blank?
-              record.send("#{attribute}=", preffered_schema + value)
-              value = preffered_schema + value
+              record.send("#{attribute}=", preferred_schema + value)
+              value = preferred_schema + value
               uri = Addressable::URI.parse(value)
             end
 

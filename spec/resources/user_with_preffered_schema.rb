@@ -3,6 +3,6 @@ class UserWithPrefferedSchema
 
   attr_accessor :website, :url
 
-  validates_url :website, :preffered_schema => 'https://'
+  validates_url :website, :preferred_schema => 'https://'
 end
 
